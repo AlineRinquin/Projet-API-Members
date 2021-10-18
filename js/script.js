@@ -1,5 +1,5 @@
 //https://reqres.in/api/users?page=1
-
+import { Users } from "./Users"
 const API_URL = `https://reqres.in/api/users?page=`;
 
 const RESP = document.getElementById('resp');
@@ -23,18 +23,12 @@ async function getData() {
     try {
         const response = await fetch(API_URL + number);
         const responsFormat = await response.json();
-        console.log(responsFormat.data);
+        console.log(responsFormat.total_pages);
         RESP.innerHTML = ''
         for (let i = 0; i < responsFormat.data.length; i++) {
-            console.log(responsFormat.data[i].last_name)
+            let user = new Users(responsFormat.data[i].last_name, responsFormat.data[i].first_name, responsFormat.data[i].id, responsFormat.data[i].email, responsFormat.data[i].avatar)
 
-            RESP.innerHTML += ` <div>
-                <img src=${responsFormat.data[i].avatar} alt="">
-                <div>
-                    <h6>${responsFormat.data[i].last_name} ${responsFormat.data[i].first_name}</h6>
-                    <span>${responsFormat.data[i].email}</span>
-                </div>
-            </div>`
+            RESP.innerHTML += user.afficher()
 
         }
 
@@ -46,6 +40,7 @@ async function getData() {
         //         <span>mail</span>
         //     </div>
         // </div>
+        // <img class="vign" src=${responsFormat.data[i].avatar} alt="">
 
 
     } catch (err) {
